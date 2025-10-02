@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Coach</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 800px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 1.1em;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .upload-section {
+      padding: 40px 20px;
+    }
+
+    .linkedin-input {
+      margin-bottom: 25px;
+    }
+
+    .linkedin-input label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .linkedin-input input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1em;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .linkedin-input input:focus {
+      border-color: #667eea;
+    }
+
+    .linkedin-hint {
+      font-size: 0.85em;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .upload-box {
+      border: 3px dashed #667eea;
+      border-radius: 10px;
+      padding: 40px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+    }
+
+    .upload-box:hover {
+      background: #f7f7ff;
+      border-color: #764ba2;
+    }
+
+    .upload-box.dragover {
+      background: #f7f7ff;
+      border-color: #764ba2;
+      transform: scale(1.02);
+    }
+
+    .upload-icon {
+      font-size: 3em;
+      margin-bottom: 15px;
+    }
+
+    .upload-text {
+      font-size: 1.2em;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .upload-hint {
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    .chat-section {
+      display: none;
+    }
+
+    .chat-messages {
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background: #f9f9f9;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      padding: 12px 18px;
+      border-radius: 18px;
+      max-width: 80%;
+      line-height: 1.5;
+    }
+
+    .message.user {
+      background: #667eea;
+      color: white;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .message.assistant {
+      background: white;
+      color: #333;
+      border: 1px solid #e0e0e0;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 25px;
+      font-size: 1em;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #667eea;
+    }
+
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-weight: 600;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .jobs-section {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .job-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 15px;
+      transition: box-shadow 0.3s;
+    }
+
+    .job-card:hover {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .job-title {
+      font-size: 1.3em;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 5px;
+    }
+
+    .job-company {
+      font-size: 1.1em;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .job-location {
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .job-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .job-requirements {
+      margin-bottom: 15px;
+    }
+
+    .job-requirements h4 {
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .job-requirements ul {
+      margin-left: 20px;
+    }
+
+    .job-requirements li {
+      margin-bottom: 5px;
+    }
+
+    .job-match {
+      background: #f0f7ff;
+      padding: 10px;
+      border-radius: 5px;
+      border-left: 3px solid #667eea;
+      margin-bottom: 10px;
+    }
+
+    .job-link {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .job-link:hover {
+      text-decoration: underline;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #667eea;
+    }
+
+    .location-prompt {
+      background: #f0f7ff;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .location-prompt h3 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Career Coach</h1>
+      <p>Let AI help you find your dream job</p>
+    </div>
+
+    <div class="content">
+      <div class="upload-section" id="uploadSection">
+        <div class="linkedin-input">
+          <label for="linkedInProfileUrl">LinkedIn Profile URL (Optional)</label>
+          <input
+            type="text"
+            id="linkedInProfileUrl"
+            placeholder="https://www.linkedin.com/in/your-profile"
+          >
+          <div class="linkedin-hint">Adding your LinkedIn profile provides more context for better job matching</div>
+        </div>
+
+        <div class="upload-box" id="uploadBox">
+          <div class="upload-icon">📄</div>
+          <div class="upload-text">Drop your resume here or click to upload</div>
+          <div class="upload-hint">PDF files only</div>
+        </div>
+        <input type="file" id="fileInput" accept=".pdf">
+      </div>
+
+      <div class="chat-section" id="chatSection">
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="input-group">
+          <input type="text" id="messageInput" placeholder="Type your response...">
+          <button id="sendBtn">Send</button>
+        </div>
+
+        <div class="location-prompt" id="locationPrompt">
+          <h3>Great! Now let's search for jobs</h3>
+          <div class="input-group">
+            <input type="text" id="locationInput" placeholder="Enter location (e.g., San Francisco, CA)">
+            <button id="searchBtn">Search Jobs</button>
+          </div>
+        </div>
+
+        <div class="jobs-section" id="jobsSection">
+          <h2 style="margin-bottom: 20px; color: #333;">Matching Jobs</h2>
+          <div id="jobsList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/main.js" type="module"></script>
+</body>
+</html>
